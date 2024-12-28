@@ -2,7 +2,6 @@ import globals from "globals";
 import pluginJs from "@eslint/js";
 import tseslintPlugin from "@typescript-eslint/eslint-plugin";
 import tsParser from "@typescript-eslint/parser";
-import pluginReact from "eslint-plugin-react";
 
 export default [
   {
@@ -23,7 +22,6 @@ export default [
     },
     plugins: {
       "@typescript-eslint": tseslintPlugin,
-      react: pluginReact,
     },
     rules: {
       // JavaScript rules
@@ -35,10 +33,6 @@ export default [
 
       // TypeScript rules
       "@typescript-eslint/no-use-before-define": ["error"],
-
-      // React-specific rules
-      "react/jsx-filename-extension": ["warn", { extensions: [".tsx"] }],
-      "react/react-in-jsx-scope": "off",
     },
   },
 ];
