@@ -9,7 +9,7 @@ import {
 } from 'sequelize';
 import { MakeNullishOptional } from 'sequelize/types/utils';
 
-export class Repository<M extends Model> {
+export class GenericRepository<M extends Model> {
   private model: ModelStatic<M>; // Use ModelStatic<T> instead of typeof Model
 
   constructor(model: ModelStatic<M>) {
@@ -53,3 +53,5 @@ export class Repository<M extends Model> {
     return await this.model.destroy({ ...options });
   }
 }
+
+// const DBModel = db[modelName as keyof typeof db] as typeof Model;
