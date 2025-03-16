@@ -23,11 +23,15 @@ export class GenericRepository<M extends Model> {
     return (await this.model.create(data, options)) as M;
   }
 
-  async findById(
+  async findByPkId(
     id: number | string,
     options?: FindOptions,
   ): Promise<M | null> {
     return (await this.model.findByPk(id, options)) as M | null;
+  }
+
+  async getData(options?: FindOptions): Promise<M | null> {
+    return (await this.model.findOne(options)) as M | null;
   }
 
   async findAll(options?: FindOptions): Promise<M[]> {
