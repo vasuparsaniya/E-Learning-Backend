@@ -14,4 +14,6 @@ export const {
   // log
   MIGRATION_LOG_ENABLE,
   QUERY_LOG_ENABLE,
+  // JWT Secret
+  JWT_SECRET,
 } = process.env as { [key: string]: string };
