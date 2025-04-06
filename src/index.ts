@@ -2,9 +2,22 @@ import express, { Application, Request, Response, NextFunction } from 'express';
 import bodyParser from 'body-parser';
 import { dbConnection } from '../packages/sequelize/database/connection';
 import { logError, logger } from '../packages/logs';
-import { SERVER_PORT } from '../packages/sequelize/config/env.config';
+import {
+  FRONTEND_URL,
+  SERVER_PORT,
+} from '../packages/sequelize/config/env.config';
+import { routers } from './server';
+import cors from 'cors';
 
 const app: Application = express();
+
+app.use(
+  cors({
+    origin: FRONTEND_URL,
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  }),
+);
 
 app.use(bodyParser.json());
 app.use(
@@ -13,7 +26,9 @@ app.use(
   }),
 );
 
-// app.use(router);
+routers().forEach((route) => {
+  app.use('/api', route);
+});
 
 app.listen(SERVER_PORT, async () => {
   try {

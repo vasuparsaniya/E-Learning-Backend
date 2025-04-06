@@ -11,6 +11,8 @@ export const {
   //server
   NODE_ENV,
   SERVER_PORT,
+  //
+  FRONTEND_URL,
   // log
   MIGRATION_LOG_ENABLE,
   QUERY_LOG_ENABLE,
