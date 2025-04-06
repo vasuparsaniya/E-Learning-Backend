@@ -31,9 +31,10 @@ export const authMiddleware = (
       new JwtStrategy(option, async (jwtPayload, done) => {
         logger.info('===========jwtPayload======= %o', jwtPayload);
         const user = await getUserPkIdRepo(jwtPayload.id, {
-          attributes: ['id'],
+          attributes: ['id', 'uuid'],
         });
-        if (user) {
+        //**uuid maintain for token block listing */
+        if (user && jwtPayload.uuid === user.uuid) {
           next();
           return done(null, true);
         } else {

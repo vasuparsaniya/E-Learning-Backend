@@ -26,6 +26,13 @@ module.exports = {
           password: {
             type: Sequelize.STRING,
           },
+          uuid: {
+            type: Sequelize.STRING,
+            allowNull: false,
+          },
+          last_login: {
+            type: Sequelize.DATE,
+          },
           created_at: {
             type: Sequelize.DATE,
             defaultValue: Sequelize.NOW,
@@ -45,6 +52,12 @@ module.exports = {
         fields: ['email'],
         type: 'unique',
         name: 'users_email_uk1',
+        transaction,
+      });
+      await queryInterface.addConstraint('users', {
+        fields: ['uuid'],
+        type: 'unique',
+        name: 'users_uuid_uk2',
         transaction,
       });
     });

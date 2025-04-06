@@ -4,6 +4,8 @@ export type UsersModelType = {
   last_name: string;
   email: string;
   password: string;
+  uuid: string;
+  last_login?: Date;
   created_at?: Date;
   updated_at?: Date;
   deleted_at?: Date;

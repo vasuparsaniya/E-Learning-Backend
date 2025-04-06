@@ -8,3 +8,10 @@ export const signUpValidationSchema = Joi.object({
 }).options({
   abortEarly: false,
 });
+
+export const loginSchema = Joi.object({
+  email: Joi.string().label('Email').required(),
+  password: Joi.string().label('Password').required(),
+}).options({
+  abortEarly: false,
+});

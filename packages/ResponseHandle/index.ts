@@ -1,6 +1,12 @@
 import { logError } from '../logs';
 import { Response } from 'express';
 
+export const RESPONSE_STATUS_CODE = Object.freeze({
+  SUCCESS: 200,
+  NOT_FOUND: 404,
+  INTERNAL_SERVER_ERROR: 500,
+});
+
 export const generalResponse = (
   res: Response,
   args: {
@@ -20,7 +26,7 @@ export const generalResponse = (
     });
   } catch (error) {
     logError(error);
-    return res.status(500).json({
+    return res.status(RESPONSE_STATUS_CODE.INTERNAL_SERVER_ERROR).json({
       data: {},
       message: 'Something went wrong!',
       toast: true,

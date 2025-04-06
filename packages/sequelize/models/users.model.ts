@@ -45,6 +45,15 @@ class UsersModel extends Model<UsersModelType, UsersModelCreationType> {
   @Column(DataType.STRING)
   password!: string;
 
+  @AllowNull(false)
+  @Unique
+  @Column(DataType.STRING)
+  uuid!: string;
+
+  @AllowNull(true)
+  @Column(DataType.DATE)
+  last_login!: Date;
+
   @CreatedAt
   created_at!: Date;
 
