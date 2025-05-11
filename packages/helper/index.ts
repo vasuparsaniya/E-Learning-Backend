@@ -1,8 +1,8 @@
 import bcrypt from 'bcrypt';
-import uuid from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 
 export const uuidGenerateHelper = () => {
-  return uuid.v4();
+  return uuidv4();
 };
 
 export const bcryptPassword = async (data: {

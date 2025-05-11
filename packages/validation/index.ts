@@ -10,9 +10,9 @@ export const validationMiddleware = (
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { error } = await validationSchema.validateAsync(req.body);
-      logger.info('=======errors validationMiddleware====== %o', error);
       // If validation failed, respond with an error message
       if (error) {
+        logger.info('=======errors validationMiddleware====== %o', error);
         generalResponse(res, {
           data: {},
           statusCode: 422,

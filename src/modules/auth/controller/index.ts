@@ -31,16 +31,13 @@ export const signUp = async (
     // ** Bcrypt Password
     const hashPassword = await bcryptPassword({ password });
 
-    const createdUser = await createUserRepo(
-      {
-        first_name: firstName,
-        last_name: lastName,
-        email: userEmail,
-        password: hashPassword,
-        uuid: uuidGenerateHelper(),
-      },
-      {},
-    );
+    const createdUser = await createUserRepo({
+      first_name: firstName,
+      last_name: lastName,
+      email: userEmail,
+      password: hashPassword,
+      uuid: uuidGenerateHelper(),
+    });
 
     const { id, first_name, last_name, email } = createdUser.get({
       plain: true,
