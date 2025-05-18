@@ -30,7 +30,7 @@ export class GenericRepository<M extends Model> {
     return (await this.model.findByPk(id, options)) as M | null;
   }
 
-  async getData(options?: FindOptions): Promise<M | null> {
+  async getData(options?: FindOptions<M['_attributes']>): Promise<M | null> {
     return (await this.model.findOne(options)) as M | null;
   }
 

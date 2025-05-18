@@ -11,6 +11,28 @@ import cors from 'cors';
 
 const app: Application = express();
 
+// Log every API hit
+app.use((req: Request, res: Response, next: NextFunction) => {
+  logger.info(`[API-HIT] ${req.method} ${req.originalUrl}`);
+  next();
+});
+
+// Log success and failed responses
+app.use((req: Request, res: Response, next: NextFunction) => {
+  res.on('finish', () => {
+    if (res.statusCode >= 200 && res.statusCode < 400) {
+      logger.info(
+        `[API-SUCCESS] ${req.method} ${req.originalUrl} - ${res.statusCode}`,
+      );
+    } else {
+      logger.error(
+        `[API-FAILED] ${req.method} ${req.originalUrl} - ${res.statusCode}`,
+      );
+    }
+  });
+  next();
+});
+
 app.use(
   cors({
     origin: FRONTEND_URL,
@@ -52,4 +74,10 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   } else {
     next();
   }
+});
+
+// Error-handling middleware for uncaught errors
+app.use((err: any, req: Request, res: Response) => {
+  logger.error(`[ERROR] ${req.method} ${req.originalUrl} - ${err.message}`);
+  res.status(500).json({ message: 'Internal Server Error' });
 });

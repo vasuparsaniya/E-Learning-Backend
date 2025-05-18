@@ -23,3 +23,6 @@ export const deleteUserRepo = UsersModelRepo.delete.bind(UsersModelRepo);
 //   data: Optional<UsersModelCreationType, 'last_login'>,
 //   options?: CreateOptions,
 // ) => UsersModelRepo.create(data, options);
+
+// export const getUserRepo = (options: {where:}) =>
+//   UsersModelRepo.getData(options);

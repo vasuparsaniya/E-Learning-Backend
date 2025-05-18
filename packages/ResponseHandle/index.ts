@@ -5,6 +5,7 @@ export const RESPONSE_STATUS_CODE = Object.freeze({
   SUCCESS: 200,
   NOT_FOUND: 404,
   INTERNAL_SERVER_ERROR: 500,
+  ALREADY_EXISTS: 409, // Used when a resource (e.g., user) already exists
 });
 
 export const generalResponse = (

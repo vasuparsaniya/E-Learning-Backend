@@ -18,6 +18,7 @@ import {
   compareHashPassword,
   uuidGenerateHelper,
 } from '../../../../packages/helper';
+import UsersModel from '../../../../packages/sequelize/models/users.model';
 
 export const signUp = async (
   req: Request,
@@ -28,6 +29,19 @@ export const signUp = async (
     const { body } = req;
     const { firstName, lastName, email: userEmail, password } = body;
 
+    /**Case:-1) Handle user email already exist or not */
+    const isUserExist = await getUserRepo({
+      where: { email: userEmail },
+      attributes: ['id'],
+    });
+    if (isUserExist) {
+      generalResponse(res, {
+        data: null,
+        statusCode: RESPONSE_STATUS_CODE.ALREADY_EXISTS,
+        message: AUTH_MESSAGES.USER_ALREADY_EXIST,
+      });
+      return;
+    }
     // ** Bcrypt Password
     const hashPassword = await bcryptPassword({ password });
 
@@ -63,24 +77,39 @@ export const login = async (
     const { body } = req;
     const { email, password } = body;
 
-    const user = await getUserRepo({
-      where: {
-        email,
-      },
-      attributes: { exclude: ['created_at', 'updated_at', 'deleted_at'] },
-    });
-    if (!user) {
-      generalResponse(res, {
-        data: null,
-        statusCode: RESPONSE_STATUS_CODE.NOT_FOUND,
-        message: AUTH_MESSAGES.SIGN_UP_SUCCESS,
+    const responseData: { user: UsersModel | null; isPasswordMatch: boolean } =
+      await db.sequelize.transaction(async (transaction) => {
+        const user = await getUserRepo({
+          where: {
+            email,
+          },
+          attributes: { exclude: ['created_at', 'updated_at', 'deleted_at'] },
+        });
+        if (!user) {
+          generalResponse(res, {
+            data: null,
+            statusCode: RESPONSE_STATUS_CODE.NOT_FOUND,
+            message: AUTH_MESSAGES.SIGN_UP_SUCCESS,
+          });
+          return;
+        }
+        const isPasswordMatch = await compareHashPassword({
+          password,
+          hashPassword: user.password,
+        });
+        if (!isPasswordMatch) {
+          return { isPasswordMatch };
+        }
+        /* update last_login time
+         */
+        await updateUserRepo(
+          { last_login: new Date() },
+          { where: { id: user.id }, transaction },
+        );
+        return { user };
       });
-      return;
-    }
-    const isPasswordMatch = await compareHashPassword({
-      password,
-      hashPassword: user.password,
-    });
+    const { user, isPasswordMatch } = responseData;
+
     if (!isPasswordMatch) {
       generalResponse(res, {
         data: null,
@@ -89,14 +118,6 @@ export const login = async (
       });
       return;
     }
-    /* update last_login time
-     */
-    await db.sequelize.transaction(async (transaction) => {
-      await updateUserRepo(
-        { last_login: new Date() },
-        { where: { id: user.id }, transaction },
-      );
-    });
 
     const token = jwt.sign(
       {
