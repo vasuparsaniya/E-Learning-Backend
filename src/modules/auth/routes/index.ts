@@ -1,7 +1,8 @@
 import { Router } from 'express';
 import { validationMiddleware } from '../../../../packages/validation';
 import { loginSchema, signUpValidationSchema } from '../validation';
-import { login, signUp } from '../controller';
+import { login, loginUser, signUp } from '../controller';
+import { authMiddleware } from '../middleware/auth.middleware';
 
 export const AuthRoutes = () => {
   const router = Router();
@@ -13,5 +14,7 @@ export const AuthRoutes = () => {
     signUp,
   );
   router.post(`${basePath}/login`, validationMiddleware(loginSchema), login);
+  router.post(`${basePath}/login-user`, authMiddleware, loginUser);
+
   return router;
 };

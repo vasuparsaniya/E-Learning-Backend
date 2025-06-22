@@ -6,6 +6,9 @@ export const RESPONSE_STATUS_CODE = Object.freeze({
   NOT_FOUND: 404,
   INTERNAL_SERVER_ERROR: 500,
   ALREADY_EXISTS: 409, // Used when a resource (e.g., user) already exists
+  BAD_REQUEST: 400,
+  UN_AUTHORIZED: 401, // Used for unauthorized access
+  FORBIDDEN: 403, // Used when access is forbidden
 });
 
 export const generalResponse = (

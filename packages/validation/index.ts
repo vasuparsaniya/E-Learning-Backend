@@ -19,12 +19,14 @@ export const validationMiddleware = (
           message: error.message,
           toast: true,
         });
+        return;
       }
 
       // If validation passed, continue to the next middleware
       next();
     } catch (error: any) {
       // Handle Joi validation errors
+      logError(error);
       if (error.isJoi) {
         generalResponse(res, {
           data: {},
@@ -32,16 +34,16 @@ export const validationMiddleware = (
           message: error.message,
           toast: true,
         });
+        return;
       }
 
-      // Log unexpected errors
-      logError(error);
       generalResponse(res, {
         data: {},
         statusCode: 500,
         message: 'Internal Server Error',
         toast: true,
       });
+      return;
     }
   };
 };

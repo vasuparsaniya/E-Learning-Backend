@@ -8,6 +8,7 @@ import {
 } from '../packages/sequelize/config/env.config';
 import { routers } from './server';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 
 const app: Application = express();
 
@@ -47,6 +48,7 @@ app.use(
     extended: true,
   }),
 );
+app.use(cookieParser());
 
 routers().forEach((route) => {
   app.use('/api', route);

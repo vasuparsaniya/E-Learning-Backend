@@ -36,8 +36,8 @@ function logError(err: any) {
   const error = err instanceof Error ? err : new Error(err);
   const stack = error.stack?.split('\n');
   const callerStackLine = stack ? stack[2] : ''; // Extract the line of the stack trace where the logging function is called
-  const fileMatch = callerStackLine.match(/\(([^)]+)\)/); // Extract the file name from the stack trace
-  const fileName = fileMatch ? fileMatch[1] : 'Unknown file'; // Get the file name or use a default value if not found
+  // const fileMatch = callerStackLine.match(/\(([^)]+)\)/); // Extract the file name from the stack trace
+  // const fileName = fileMatch ? fileMatch[1] : 'Unknown file'; // Get the file name or use a default value if not found
   // logger.error({ file: fileName, error: error.message }); //error.name, error.stack
   logger.error(err);
 }

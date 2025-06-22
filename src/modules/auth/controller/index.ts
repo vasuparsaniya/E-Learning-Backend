@@ -79,6 +79,8 @@ export const login = async (
 
     const responseData: { user: UsersModel | null; isPasswordMatch: boolean } =
       await db.sequelize.transaction(async (transaction) => {
+        let isPasswordMatch = false;
+
         const user = await getUserRepo({
           where: {
             email,
@@ -86,19 +88,14 @@ export const login = async (
           attributes: { exclude: ['created_at', 'updated_at', 'deleted_at'] },
         });
         if (!user) {
-          generalResponse(res, {
-            data: null,
-            statusCode: RESPONSE_STATUS_CODE.NOT_FOUND,
-            message: AUTH_MESSAGES.SIGN_UP_SUCCESS,
-          });
-          return;
+          return { user: null, isPasswordMatch };
         }
-        const isPasswordMatch = await compareHashPassword({
+        isPasswordMatch = await compareHashPassword({
           password,
           hashPassword: user.password,
         });
         if (!isPasswordMatch) {
-          return { isPasswordMatch };
+          return { user, isPasswordMatch };
         }
         /* update last_login time
          */
@@ -106,14 +103,23 @@ export const login = async (
           { last_login: new Date() },
           { where: { id: user.id }, transaction },
         );
-        return { user };
+        return { user, isPasswordMatch };
       });
     const { user, isPasswordMatch } = responseData;
+
+    if (!user) {
+      generalResponse(res, {
+        data: null,
+        statusCode: RESPONSE_STATUS_CODE.NOT_FOUND,
+        message: AUTH_MESSAGES.USER_NOT_FOUND,
+      });
+      return;
+    }
 
     if (!isPasswordMatch) {
       generalResponse(res, {
         data: null,
-        statusCode: RESPONSE_STATUS_CODE.NOT_FOUND,
+        statusCode: RESPONSE_STATUS_CODE.BAD_REQUEST,
         message: AUTH_MESSAGES.INVALID_LOGIN_CREDENTIALS,
       });
       return;
@@ -143,6 +149,27 @@ export const login = async (
         data: {},
         message: AUTH_MESSAGES.LOGIN_SUCCESS,
       });
+  } catch (error) {
+    logError(error);
+    next(error);
+  }
+};
+
+export const loginUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { user } = req;
+
+    console.log('=======tokenData', { user });
+    generalResponse(res, {
+      data: {},
+      statusCode: RESPONSE_STATUS_CODE.SUCCESS,
+      message: AUTH_MESSAGES.LOGIN_USER_DATA_GET_SUCCESS,
+    });
+    return;
   } catch (error) {
     logError(error);
     next(error);
