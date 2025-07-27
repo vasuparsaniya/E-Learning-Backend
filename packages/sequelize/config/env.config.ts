@@ -18,4 +18,13 @@ export const {
   QUERY_LOG_ENABLE,
   // JWT Secret
   JWT_SECRET,
+
+  // SMTP
+  SMTP_USER,
+  SMTP_HOST,
+  SMTP_PORT,
+  SMTP_SECURE,
+  GOOGLE_CLIENT_ID,
+  GOOGLE_CLIENT_SECRET,
+  GOOGLE_REFRESH_TOKEN,
 } = process.env as { [key: string]: string };

@@ -29,7 +29,7 @@ export const generalResponse = (
       toast,
     });
   } catch (error) {
-    logError(error);
+    logError({ message: 'generalResponse', err: error });
     return res.status(RESPONSE_STATUS_CODE.INTERNAL_SERVER_ERROR).json({
       data: {},
       message: 'Something went wrong!',

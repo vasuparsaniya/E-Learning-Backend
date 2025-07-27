@@ -63,7 +63,7 @@ export const signUp = async (
       message: AUTH_MESSAGES.SIGN_UP_SUCCESS,
     });
   } catch (error) {
-    logError(error);
+    logError({ err: error, message: 'Error in signUp controller' });
     next(error);
   }
 };
@@ -150,7 +150,7 @@ export const login = async (
         message: AUTH_MESSAGES.LOGIN_SUCCESS,
       });
   } catch (error) {
-    logError(error);
+    logError({ err: error, message: 'Error in login controller' });
     next(error);
   }
 };
@@ -171,7 +171,7 @@ export const loginUser = async (
     });
     return;
   } catch (error) {
-    logError(error);
+    logError({ err: error, message: 'Error in loginUser controller' });
     next(error);
   }
 };

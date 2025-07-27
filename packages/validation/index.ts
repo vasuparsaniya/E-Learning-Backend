@@ -26,7 +26,7 @@ export const validationMiddleware = (
       next();
     } catch (error: any) {
       // Handle Joi validation errors
-      logError(error);
+      logError({ err: error, message: 'Validation error in middleware' });
       if (error.isJoi) {
         generalResponse(res, {
           data: {},

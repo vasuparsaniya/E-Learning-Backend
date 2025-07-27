@@ -61,7 +61,7 @@ app.listen(SERVER_PORT, async () => {
     );
     await dbConnection();
   } catch (err) {
-    logError('Server Lister Error ' + err);
+    logError({ message: 'Server Lister Error ', err });
   }
 });
 

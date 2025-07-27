@@ -32,7 +32,7 @@ const dbConnection = async () => {
     await db.sequelize.authenticate();
     logger.info(`=============== 🛢️ Database Connect 🛢️ ===============`);
   } catch (error) {
-    logError('Database Connection Error: ' + error);
+    logError({ message: 'Database Connection Error: ', err: error });
   }
 };
 

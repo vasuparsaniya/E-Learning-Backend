@@ -37,7 +37,6 @@ export const auth = (passport: PassportStatic) => {
       });
       //**uuid maintain for token block listing */
       if (user && jwtPayload.uuid === user.uuid) {
-        // next();
         return done(null, {
           id: user.id,
           uuid: user.uuid,
